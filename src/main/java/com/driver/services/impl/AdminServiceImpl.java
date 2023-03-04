@@ -53,7 +53,7 @@ public class AdminServiceImpl implements AdminService {
         ServiceProvider serviceProvider=serviceProviderRepository1.findById(serviceProviderId).get();
         List<Country> countryList=serviceProvider.getCountryList();
         Country country=new Country();
-        if(!CountryName.values().equals(countryName))
+        if(!isValidCountryName(countryName))
         {
             throw new Exception("Country not found");
         }
@@ -65,5 +65,23 @@ public class AdminServiceImpl implements AdminService {
         serviceProviderRepository1.save(serviceProvider);
 
         return serviceProvider;
+    }
+
+    private boolean isValidCountryName(String countryName)
+    {
+        if(countryName.equalsIgnoreCase("IND")){
+            return true;
+        }
+        else if(countryName.equalsIgnoreCase("USA")){
+            return true;
+        }
+        else if(countryName.equalsIgnoreCase("AUS"))
+            return true;
+        else if(countryName.equalsIgnoreCase("CHI"))
+            return true;
+        else if(countryName.equalsIgnoreCase("JPN"))
+            return true;
+        else
+            return false;
     }
 }

@@ -25,10 +25,10 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User register(String username, String password, String countryName) throws Exception{
-        if(!CountryName.values().equals(countryName))
-        {
-            throw new Exception("Country not found");
-        }
+         if(!isValidCountryName(countryName))
+         {
+             throw new Exception("Country not found");
+         }
          Country country=new Country();
          country.setCountryName(CountryName.valueOf(countryName));
          country.setCode(CountryName.valueOf(countryName).toCode());
@@ -56,5 +56,23 @@ public class UserServiceImpl implements UserService {
         userRepository3.save(user);
         return user;
 
+    }
+
+    private boolean isValidCountryName(String countryName)
+    {
+        if(countryName.equalsIgnoreCase("IND")){
+            return true;
+        }
+        else if(countryName.equalsIgnoreCase("USA")){
+            return true;
+        }
+        else if(countryName.equalsIgnoreCase("AUS"))
+            return true;
+        else if(countryName.equalsIgnoreCase("CHI"))
+            return true;
+        else if(countryName.equalsIgnoreCase("JPN"))
+            return true;
+        else
+            return false;
     }
 }
