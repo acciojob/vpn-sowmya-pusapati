@@ -10,7 +10,7 @@ public class Country{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int countryId;
     private CountryName countryName;
-    private String countryCode;
+    private String code;
 
     public Country() {
     }
@@ -18,7 +18,7 @@ public class Country{
     public Country(int countryId, CountryName countryName, String code) {
         this.countryId = countryId;
         this.countryName = countryName;
-        this.countryCode =countryName.toCode();
+        this.code =countryName.toCode();
     }
 
     @OneToOne
@@ -44,12 +44,12 @@ public class Country{
         this.countryName = countryName;
     }
 
-    public String getCountryCode() {
-        return countryCode;
+    public String getCode() {
+        return code;
     }
 
-    public void setCountryCode(String countryCode) {
-        this.countryCode = countryCode;
+    public void setCode(String countryCode) {
+        this.code = countryCode;
     }
 
     public User getUser() {

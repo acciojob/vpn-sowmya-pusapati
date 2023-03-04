@@ -27,7 +27,7 @@ public class AdminServiceImpl implements AdminService {
     @Override
     public Admin register(String username, String password) {
         Admin admin=new Admin();
-        admin.setAdminName(username);
+        admin.setUsername(username);
         admin.setPassword(password);
         adminRepository1.save(admin);
         return admin;
@@ -39,9 +39,9 @@ public class AdminServiceImpl implements AdminService {
         ServiceProvider serviceProvider=new ServiceProvider();
         serviceProvider.setName(providerName);
         serviceProvider.setAdmin(admin);
-        List<ServiceProvider> serviceProviderList=admin.getServiceProviderList();
+        List<ServiceProvider> serviceProviderList=admin.getServiceProviders();
         serviceProviderList.add(serviceProvider);
-        admin.setServiceProviderList(serviceProviderList);
+        admin.setServiceProviders(serviceProviderList);
         adminRepository1.save(admin);
         return admin;
 
@@ -58,7 +58,7 @@ public class AdminServiceImpl implements AdminService {
             throw new Exception("Country not found");
         }
         country.setCountryName(CountryName.valueOf(countryName));
-        country.setCountryCode(CountryName.valueOf(countryName).toCode());
+        country.setCode(CountryName.valueOf(countryName).toCode());
         country.setServiceProvider(serviceProvider);
         countryList.add(country);
         serviceProvider.setCountryList(countryList);

@@ -15,7 +15,7 @@ public class User {
 
     private String originalIp;
     private String maskedIp;
-    private boolean isConnected;
+    private boolean connected;
 
     public User() {
     }
@@ -26,11 +26,11 @@ public class User {
         this.password = password;
         this.originalIp = originalIp;
         this.maskedIp = maskedIp;
-        this.isConnected = isConnected;
+        this.connected = isConnected;
     }
 
     @OneToOne(mappedBy = "user",cascade = CascadeType.ALL)
-    private Country country;
+    private Country originalCountry;
 
     @OneToMany(mappedBy = "user",cascade = CascadeType.ALL)
     private List<Connection> connectionList=new ArrayList<>();
@@ -80,20 +80,20 @@ public class User {
         this.maskedIp = maskedIp;
     }
 
-    public boolean isConnected() {
-        return isConnected;
+    public boolean getConnected() {
+        return connected;
     }
 
     public void setConnected(boolean connected) {
-        isConnected = connected;
+        connected = connected;
     }
 
-    public Country getCountry() {
-        return country;
+    public Country getOriginalCountry() {
+        return originalCountry;
     }
 
-    public void setCountry(Country country) {
-        this.country = country;
+    public void setOriginalCountry(Country country) {
+        this.originalCountry= country;
     }
 
     public List<Connection> getConnectionList() {

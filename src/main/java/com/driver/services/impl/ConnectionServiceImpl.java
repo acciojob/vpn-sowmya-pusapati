@@ -32,11 +32,11 @@ public class ConnectionServiceImpl implements ConnectionService {
 //            }
 //
 //        }
-        if(user.isConnected()==true)
+        if(user.getConnected()==true)
         {
             throw new Exception("Already connected");
         }
-        if(user.getCountry().equals(countryName)){
+        if(user.getOriginalCountry().equals(countryName)){
             return user;
         }
         ServiceProvider serviceProvider=null;
@@ -65,12 +65,12 @@ public class ConnectionServiceImpl implements ConnectionService {
         {
             if(country.getCountryName().equals(countryName))
             {
-                user.setCountry(country);
-                user.setMaskedIp(country.getCountryCode()+"."+serviceProvider.getId()+"."+userId);
+                user.setOriginalCountry(country);
+                user.setMaskedIp(country.getCode()+"."+serviceProvider.getId()+"."+userId);
                 user.setConnected(true);
                 user.getServiceProviderList().add(serviceProvider);
                 user.getConnectionList().add(connection);
-                serviceProvider.getUserList().add(user);
+                serviceProvider.getUsers().add(user);
                 serviceProvider.getConnectionList().add(connection);
                 connection.setUser(user);
 
@@ -88,7 +88,7 @@ public class ConnectionServiceImpl implements ConnectionService {
     @Override
     public User disconnect(int userId) throws Exception {
          User user=userRepository2.findById(userId).get();
-         if(user.isConnected()==true)
+         if(user.getConnected()==true)
          {
              throw  new Exception("Already disconnected");
          }
@@ -104,19 +104,19 @@ public class ConnectionServiceImpl implements ConnectionService {
        User sender=userRepository2.findById(senderId).get();
        User receiver=userRepository2.findById(receiverId).get();
        String receiverCountryCode=null;
-         if(receiver.isConnected())
+         if(receiver.getConnected())
          {
              receiverCountryCode=receiver.getMaskedIp().substring(0,3);
 
          }
          else{
-             receiverCountryCode=receiver.getCountry().getCountryCode();
+             receiverCountryCode=receiver.getOriginalCountry().getCode();
          }
-         String senderCountryCode=sender.getCountry().getCountryCode();
+         String senderCountryCode=sender.getOriginalCountry().getCode();
          if(senderCountryCode.equals(receiverCountryCode)){
              return sender;
          }
-         String receiverCountryName= String.valueOf(receiver.getCountry().getCountryName());
+         String receiverCountryName= String.valueOf(receiver.getOriginalCountry().getCountryName());
          try{
              User updatedSender=connect(senderId,receiverCountryName);
              userRepository2.save(updatedSender);
