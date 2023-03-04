@@ -22,9 +22,9 @@ public class ConnectionServiceImpl implements ConnectionService {
     @Override
     public User connect(int userId, String countryName) throws Exception{
         User user=userRepository2.findById(userId).get();
-       List<ServiceProvider> serviceProviderList=user.getServiceProviderList();
 
-        if(user.getConnected()==true)
+
+        if(user.isConnected())
         {
             throw new Exception("Already connected");
         }
@@ -36,7 +36,7 @@ public class ConnectionServiceImpl implements ConnectionService {
         ServiceProvider serviceProvider=null;
         int serviceId=Integer.MAX_VALUE;
         String countryCode=null;
-        for(ServiceProvider serviceProvider1:serviceProviderList)
+        for(ServiceProvider serviceProvider1:user.getServiceProviderList())
         {
             for(Country country:serviceProvider1.getCountryList()){
                 if(countryName.equalsIgnoreCase(country.getCountryName().toString())&&serviceProvider1.getId()<serviceId)
@@ -75,9 +75,9 @@ public class ConnectionServiceImpl implements ConnectionService {
     @Override
     public User disconnect(int userId) throws Exception {
          User user=userRepository2.findById(userId).get();
-         if(user.getConnected()==false)
+         if(!user.isConnected())
          {
-             throw  new Exception("Already disconnected");
+             throw  new Exception("AlreadyDisconnected");
          }
 
          user.setConnected(false);
@@ -91,7 +91,7 @@ public class ConnectionServiceImpl implements ConnectionService {
        User sender=userRepository2.findById(senderId).get();
        User receiver=userRepository2.findById(receiverId).get();
        String receiverCountryCode=null;
-         if(receiver.getConnected())
+         if(receiver.isConnected())
          {
              receiverCountryCode=receiver.getMaskedIp().substring(0,3);
 
@@ -106,7 +106,7 @@ public class ConnectionServiceImpl implements ConnectionService {
          String receiverCountryName=getCountryNameByCode(receiverCountryCode);
          try{
              User updatedSender=connect(senderId,receiverCountryName);
-             userRepository2.save(updatedSender);
+
              return updatedSender;
          }
          catch(Exception e)

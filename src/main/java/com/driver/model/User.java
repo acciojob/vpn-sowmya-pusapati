@@ -62,7 +62,9 @@ public class User {
         this.password = password;
     }
 
-
+     public Boolean isConnected(){
+       return this.connected;
+     }
 
     public String getOriginalIp() {
         return originalIp;
