@@ -57,7 +57,7 @@ public class ConnectionServiceImpl implements ConnectionService {
         connection.setUser(user);
 
         connection.setServiceProvider(serviceProvider);
-        connectionRepository2.save(connection);
+
         serviceProvider.getConnectionList().add(connection);
         String maskedIp=countryCode+"."+serviceProvider.getId()+"."+user.getId();
         user.setMaskedIp(maskedIp);
@@ -75,7 +75,7 @@ public class ConnectionServiceImpl implements ConnectionService {
     @Override
     public User disconnect(int userId) throws Exception {
          User user=userRepository2.findById(userId).get();
-         if(user.getConnected()==true)
+         if(user.getConnected()==false)
          {
              throw  new Exception("Already disconnected");
          }
@@ -103,7 +103,7 @@ public class ConnectionServiceImpl implements ConnectionService {
          if(senderCountryCode.equals(receiverCountryCode)){
              return sender;
          }
-         String receiverCountryName= String.valueOf(receiver.getOriginalCountry().getCountryName());
+         String receiverCountryName=getCountryNameByCode(receiverCountryCode);
          try{
              User updatedSender=connect(senderId,receiverCountryName);
              userRepository2.save(updatedSender);
@@ -114,5 +114,40 @@ public class ConnectionServiceImpl implements ConnectionService {
              throw new Exception("Cannot establish communication");
          }
 
+    }
+    private String getCountryNameByCode(String countryCode)
+    {
+        for(CountryName countryName:CountryName.values())
+        {
+            if(countryCode.equals(countryName.toCode()))
+            {
+                return countryName.toString();
+            }
+        }
+        return null;
+    }
+    public CountryName getCountryName(String countryName) throws Exception
+    {
+        if(countryName.equalsIgnoreCase("IND"))
+        {
+            return CountryName.IND;
+        }
+        if(countryName.equalsIgnoreCase("USA"))
+        {
+            return CountryName.USA;
+        }
+        if(countryName.equalsIgnoreCase("AUS"))
+        {
+            return CountryName.AUS;
+        }
+        if(countryName.equalsIgnoreCase("CHI"))
+        {
+            return CountryName.CHI;
+        }
+        if(countryName.equalsIgnoreCase("JPN"))
+        {
+            return CountryName.JPN;
+        }
+        throw new Exception("Country not found");
     }
 }
