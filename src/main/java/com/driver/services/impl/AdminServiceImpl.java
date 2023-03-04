@@ -57,8 +57,9 @@ public class AdminServiceImpl implements AdminService {
         {
             throw new Exception("Country not found");
         }
-        country.setCountryName(CountryName.valueOf(countryName));
-        country.setCode(CountryName.valueOf(countryName).toCode());
+        CountryName countryName1=getCountryName(countryName);
+        country.setCountryName(countryName1);
+        country.setCode(countryName1.toCode());
         country.setServiceProvider(serviceProvider);
         countryList.add(country);
         serviceProvider.setCountryList(countryList);
@@ -75,13 +76,42 @@ public class AdminServiceImpl implements AdminService {
         else if(countryName.equalsIgnoreCase("USA")){
             return true;
         }
-        else if(countryName.equalsIgnoreCase("AUS"))
+        else if(countryName.equalsIgnoreCase("AUS")) {
             return true;
-        else if(countryName.equalsIgnoreCase("CHI"))
+        }
+        else if(countryName.equalsIgnoreCase("CHI")) {
             return true;
-        else if(countryName.equalsIgnoreCase("JPN"))
+        }
+        else if(countryName.equalsIgnoreCase("JPN")) {
             return true;
-        else
+        }
+        else {
             return false;
+        }
+    }
+
+    public CountryName getCountryName(String countryName) throws Exception
+    {
+        if(countryName.equalsIgnoreCase("IND"))
+        {
+            return CountryName.IND;
+        }
+        if(countryName.equalsIgnoreCase("USA"))
+        {
+            return CountryName.USA;
+        }
+        if(countryName.equalsIgnoreCase("AUS"))
+        {
+            return CountryName.AUS;
+        }
+        if(countryName.equalsIgnoreCase("CHI"))
+        {
+            return CountryName.CHI;
+        }
+        if(countryName.equalsIgnoreCase("JPN"))
+        {
+            return CountryName.JPN;
+        }
+        throw new Exception("Country not found");
     }
 }

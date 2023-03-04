@@ -30,8 +30,8 @@ public class UserServiceImpl implements UserService {
              throw new Exception("Country not found");
          }
          Country country=new Country();
-         country.setCountryName(CountryName.valueOf(countryName));
-         country.setCode(CountryName.valueOf(countryName).toCode());
+         country.setCountryName(getCountryName(countryName));
+         country.setCode(getCountryName(countryName).toCode());
          User user=new User();
          user.setOriginalCountry(country);
 
@@ -74,5 +74,29 @@ public class UserServiceImpl implements UserService {
             return true;
         else
             return false;
+    }
+    public CountryName getCountryName(String countryName) throws Exception
+    {
+        if(countryName.equalsIgnoreCase("IND"))
+        {
+            return CountryName.IND;
+        }
+        if(countryName.equalsIgnoreCase("USA"))
+        {
+            return CountryName.USA;
+        }
+        if(countryName.equalsIgnoreCase("AUS"))
+        {
+            return CountryName.AUS;
+        }
+        if(countryName.equalsIgnoreCase("CHI"))
+        {
+            return CountryName.CHI;
+        }
+        if(countryName.equalsIgnoreCase("JPN"))
+        {
+            return CountryName.JPN;
+        }
+        throw new Exception("Country not found");
     }
 }
