@@ -10,19 +10,19 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    private String userName;
+    private String username;
     private String password;
 
     private String originalIp;
     private String maskedIp;
-    private boolean connected;
+    private Boolean connected;
 
     public User() {
     }
 
-    public User(int id, String userName, String password,  String originalIp, String maskedIp, boolean isConnected) {
+    public User(int id, String userName, String password,  String originalIp, String maskedIp, Boolean isConnected) {
         this.id = id;
-        this.userName = userName;
+        this.username = userName;
         this.password = password;
         this.originalIp = originalIp;
         this.maskedIp = maskedIp;
@@ -46,12 +46,12 @@ public class User {
         this.id = id;
     }
 
-    public String getUserName() {
-        return userName;
+    public String getUsername() {
+        return username;
     }
 
-    public void setUserName(String userName) {
-        this.userName = userName;
+    public void setUsername(String userName) {
+        this.username = userName;
     }
 
     public String getPassword() {
@@ -80,11 +80,11 @@ public class User {
         this.maskedIp = maskedIp;
     }
 
-    public boolean getConnected() {
+    public Boolean getConnected() {
         return connected;
     }
 
-    public void setConnected(boolean connected) {
+    public void setConnected(Boolean connected) {
         connected = connected;
     }
 
