@@ -4,24 +4,28 @@ import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
+@Table(name = "admin")
 @Entity
 public class Admin {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    String username;
-    String password;
+
+    private String username;
+    private String password;
+
+    @OneToMany(mappedBy = "admin", cascade = CascadeType.ALL)
+    private List<ServiceProvider> serviceProviders = new ArrayList<>();
+
+    public Admin(int id, String username, String password, List<ServiceProvider> serviceProviders) {
+        this.id = id;
+        this.username = username;
+        this.password = password;
+        this.serviceProviders = serviceProviders;
+    }
 
     public Admin() {
     }
-
-    public Admin(int id, String adminName, String password) {
-        this.id = id;
-        this.username = adminName;
-        this.password = password;
-    }
-    @OneToMany(mappedBy = "admin",cascade = CascadeType.ALL)
-    List<ServiceProvider> serviceProviders=new ArrayList<>();
 
     public int getId() {
         return id;
@@ -35,8 +39,8 @@ public class Admin {
         return username;
     }
 
-    public void setUsername(String adminName) {
-        this.username = adminName;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public String getPassword() {
@@ -55,4 +59,3 @@ public class Admin {
         this.serviceProviders = serviceProviders;
     }
 }
-

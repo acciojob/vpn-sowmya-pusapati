@@ -25,9 +25,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User register(String username, String password, String countryName) throws Exception{
-        //create a user of given country. The originalIp of the user should be "countryCode.userId" and return the user.
-        // Note that right now user is not connected and thus connected would be false and maskedIp would be null
-        //Note that the userId is created automatically by the repository layer
+
         if(countryName.equalsIgnoreCase("ind") || countryName.equalsIgnoreCase("aus") || countryName.equalsIgnoreCase("usa") || countryName.equalsIgnoreCase("chi") || countryName.equalsIgnoreCase("jpn")) {
 
 
@@ -83,8 +81,5 @@ public class UserServiceImpl implements UserService {
 
         serviceProviderRepository3.save(serviceProvider);
         return user;
-
     }
-
-
 }

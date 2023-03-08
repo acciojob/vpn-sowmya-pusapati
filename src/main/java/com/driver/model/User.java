@@ -5,37 +5,42 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
+@Table(name = "user")
 public class User {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    private String username;
-    private String password;
 
+    private String username;
+    private  String password;
     private String originalIp;
     private String maskedIp;
     private Boolean connected;
 
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<Connection> connectionList = new ArrayList<>();
+
+    @ManyToMany
+    @JoinColumn
+    private List<ServiceProvider> serviceProviderList = new ArrayList<>();
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+    private Country originalCountry;
+
     public User() {
     }
 
-    public User(int id, String userName, String password,  String originalIp, String maskedIp, Boolean isConnected) {
+    public User(int id, String username, String password, String originalIp, String maskedIp, Boolean connected, List<Connection> connectionList, List<ServiceProvider> serviceProviderList, Country originalCountry) {
         this.id = id;
-        this.username = userName;
+        this.username = username;
         this.password = password;
         this.originalIp = originalIp;
         this.maskedIp = maskedIp;
-        this.connected = isConnected;
+        this.connected = connected;
+        this.connectionList = connectionList;
+        this.serviceProviderList = serviceProviderList;
+        this.originalCountry = originalCountry;
     }
-
-    @OneToOne(mappedBy = "user",cascade = CascadeType.ALL)
-    private Country originalCountry;
-
-    @OneToMany(mappedBy = "user",cascade = CascadeType.ALL)
-    private List<Connection> connectionList=new ArrayList<>();
-
-    @ManyToMany
-    private List<ServiceProvider> serviceProviderList=new ArrayList<>();
 
     public int getId() {
         return id;
@@ -49,8 +54,8 @@ public class User {
         return username;
     }
 
-    public void setUsername(String userName) {
-        this.username = userName;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public String getPassword() {
@@ -60,10 +65,6 @@ public class User {
     public void setPassword(String password) {
         this.password = password;
     }
-
-     public Boolean isConnected(){
-       return this.connected;
-     }
 
     public String getOriginalIp() {
         return originalIp;
@@ -86,15 +87,7 @@ public class User {
     }
 
     public void setConnected(Boolean connected) {
-        connected = connected;
-    }
-
-    public Country getOriginalCountry() {
-        return originalCountry;
-    }
-
-    public void setOriginalCountry(Country country) {
-        this.originalCountry= country;
+        this.connected = connected;
     }
 
     public List<Connection> getConnectionList() {
@@ -111,5 +104,13 @@ public class User {
 
     public void setServiceProviderList(List<ServiceProvider> serviceProviderList) {
         this.serviceProviderList = serviceProviderList;
+    }
+
+    public Country getOriginalCountry() {
+        return originalCountry;
+    }
+
+    public void setOriginalCountry(Country originalCountry) {
+        this.originalCountry = originalCountry;
     }
 }

@@ -1,21 +1,15 @@
 package com.driver.model;
 
-import org.hibernate.annotations.Generated;
-
 import javax.persistence.*;
 
 @Entity
+@Table(name = "Connection")
 public class Connection {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    public Connection() {
-    }
-
-    public Connection(int id) {
-        this.id = id;
-    }
     @ManyToOne
     @JoinColumn
     private ServiceProvider serviceProvider;
@@ -23,6 +17,15 @@ public class Connection {
     @ManyToOne
     @JoinColumn
     private User user;
+
+    public Connection(int id, ServiceProvider serviceProvider, User user) {
+        this.id = id;
+        this.serviceProvider = serviceProvider;
+        this.user = user;
+    }
+
+    public Connection() {
+    }
 
     public int getId() {
         return id;

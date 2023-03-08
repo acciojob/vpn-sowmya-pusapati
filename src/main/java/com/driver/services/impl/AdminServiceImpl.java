@@ -56,13 +56,11 @@ public class AdminServiceImpl implements AdminService {
 
 
         return admin;
-
     }
 
     @Override
     public ServiceProvider addCountry(int serviceProviderId, String countryName) throws Exception{
-
-        // ind, aus, usa, chi, jpn.
+// ind, aus, usa, chi, jpn.
         if(countryName.equalsIgnoreCase("ind") || countryName.equalsIgnoreCase("aus") || countryName.equalsIgnoreCase("usa") || countryName.equalsIgnoreCase("chi") || countryName.equalsIgnoreCase("jpn")) {
 
 
@@ -101,7 +99,4 @@ public class AdminServiceImpl implements AdminService {
         else
             throw new Exception("Country not found");
     }
-
-
-
 }

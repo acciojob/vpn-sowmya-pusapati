@@ -1,38 +1,49 @@
-package com.driver.model;
+package com.driver.model;// Note: Do not write @Enumerated annotation above CountryName in this model.
+
+import com.driver.model.CountryName;
+import com.driver.model.ServiceProvider;
+import com.driver.model.User;
 
 import javax.persistence.*;
 
-// Note: Do not write @Enumerated annotation above CountryName in this model.
 @Entity
-public class Country{
+@Table(name="country")
+
+public class Country {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int countryId;
+    private int id;
+
     private CountryName countryName;
     private String code;
 
-    public Country() {
-    }
-
-    public Country(int countryId, CountryName countryName, String code) {
-        this.countryId = countryId;
-        this.countryName = countryName;
-        this.code =countryName.toCode();
-    }
-
     @OneToOne
+    @JoinColumn
     private User user;
 
     @ManyToOne
     @JoinColumn
     private ServiceProvider serviceProvider;
 
-    public int getCountryId() {
-        return countryId;
+
+    public Country(int id, CountryName countryName, String code, User user, ServiceProvider serviceProvider) {
+        this.id = id;
+        this.countryName = countryName;
+        this.code = code;
+        this.user = user;
+        this.serviceProvider = serviceProvider;
     }
 
-    public void setCountryId(int countryId) {
-        this.countryId = countryId;
+    public Country() {
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public CountryName getCountryName() {
@@ -47,8 +58,8 @@ public class Country{
         return code;
     }
 
-    public void setCode(String countryCode) {
-        this.code = countryCode;
+    public void setCode(String code) {
+        this.code = code;
     }
 
     public User getUser() {

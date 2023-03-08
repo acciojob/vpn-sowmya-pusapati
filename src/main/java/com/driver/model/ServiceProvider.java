@@ -5,31 +5,43 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
+@Table(name = "serviceprovider")
 public class ServiceProvider {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+
     private String name;
 
-    public ServiceProvider() {
-    }
-
-    public ServiceProvider(int id, String name) {
-        this.id = id;
-        this.name = name;
-    }
+    // admin is child
     @ManyToOne
     @JoinColumn
     private Admin admin;
 
-    @ManyToMany
-    private List<User> users=new ArrayList<>();
+    //parent of country
+    @OneToMany(mappedBy = "serviceProvider" , cascade = CascadeType.ALL)
+    private List<Country> countryList = new ArrayList<>();
 
-    @OneToMany(mappedBy = "serviceProvider",cascade = CascadeType.ALL)
-    private List<Connection> connectionList=new ArrayList<>();
+    //parent of connection
+    @OneToMany(mappedBy = "serviceProvider", cascade = CascadeType.ALL)
+    private List<Connection> connectionList = new ArrayList<>();
 
-    @OneToMany(mappedBy = "serviceProvider",cascade = CascadeType.ALL)
-    private List<Country> countryList=new ArrayList<>();
+
+    @ManyToMany(mappedBy = "serviceProviderList", cascade = CascadeType.ALL)
+    private List<User> users = new ArrayList<>();
+
+    public ServiceProvider(int id, String name, Admin admin, List<Country> countryList, List<Connection> connectionList, List<User> users) {
+        this.id = id;
+        this.name = name;
+        this.admin = admin;
+        this.countryList = countryList;
+        this.connectionList = connectionList;
+        this.users = users;
+    }
+
+    public ServiceProvider() {
+    }
 
     public int getId() {
         return id;
@@ -55,12 +67,12 @@ public class ServiceProvider {
         this.admin = admin;
     }
 
-    public List<User> getUsers() {
-        return users;
+    public List<Country> getCountryList() {
+        return countryList;
     }
 
-    public void setUsers(List<User> userList) {
-        this.users = userList;
+    public void setCountryList(List<Country> countryList) {
+        this.countryList = countryList;
     }
 
     public List<Connection> getConnectionList() {
@@ -71,11 +83,11 @@ public class ServiceProvider {
         this.connectionList = connectionList;
     }
 
-    public List<Country> getCountryList() {
-        return countryList;
+    public List<User> getUsers() {
+        return users;
     }
 
-    public void setCountryList(List<Country> countryList) {
-        this.countryList = countryList;
+    public void setUsers(List<User> users) {
+        this.users = users;
     }
 }
