@@ -25,27 +25,35 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User register(String username, String password, String countryName) throws Exception{
-         if(!isValidCountryName(countryName))
-         {
-             throw new Exception("Country not found");
-         }
-         Country country=new Country();
-         country.setCountryName(getCountryName(countryName));
-         country.setCode(getCountryName(countryName).toCode());
+        //create a user of given country. The originalIp of the user should be "countryCode.userId" and return the user.
+        // Note that right now user is not connected and thus connected would be false and maskedIp would be null
+        //Note that the userId is created automatically by the repository layer
+        if(!isValidCountryName(countryName)){
+            throw new Exception("Country not found");
+        }
 
-         User user=new User();
-         user.setUsername(username);
-         user.setPassword(password);
-         user.setConnected(false);
-         user.setOriginalCountry(country);
-         country.setUser(user);
+        //given to create new country for country name
+        Country country=new Country();
+        CountryName countryName1=getCountryName(countryName);
+        country.setCountryName(countryName1);
+        country.setCode(countryName1.toCode());
 
-         userRepository3.save(user);
-        user.setOriginalIp(country.getCode()+"."+user.getId());
+        User user=new User();
+        user.setUsername(username);
+        user.setPassword(password);
+        user.setConnected(false);
+        user.setOriginalCountry(country);
+
+        country.setUser(user);
+        //need to save first to get id for user
+        userRepository3.save(user);
+
+        String originalIP=country.getCode()+"."+user.getId();
+        user.setOriginalIp(originalIP);
+
         userRepository3.save(user);
 
         return user;
-
     }
 
     @Override
@@ -59,45 +67,42 @@ public class UserServiceImpl implements UserService {
 
     }
 
-    private boolean isValidCountryName(String countryName)
-    {
-        if(countryName.equalsIgnoreCase("IND")){
+    private boolean isValidCountryName(String countryName){
+        //to be filled later
+        if (countryName.equalsIgnoreCase("IND")) {
             return true;
-        }
-        else if(countryName.equalsIgnoreCase("USA")){
+        } else if (countryName.equalsIgnoreCase("USA")) {
             return true;
-        }
-        else if(countryName.equalsIgnoreCase("AUS"))
+        } else if (countryName.equalsIgnoreCase("AUS")) {
             return true;
-        else if(countryName.equalsIgnoreCase("CHI"))
+        } else if (countryName.equalsIgnoreCase("CHI")) {
             return true;
-        else if(countryName.equalsIgnoreCase("JPN"))
+        } else if (countryName.equalsIgnoreCase("JPN")) {
             return true;
-        else
+        } else {
             return false;
+        }
     }
-    public CountryName getCountryName(String countryName) throws Exception
-    {
-        if(countryName.equalsIgnoreCase("IND"))
-        {
+
+    private CountryName getCountryName(String countryName) throws Exception {
+        if(countryName.equalsIgnoreCase("IND") ){
             return CountryName.IND;
         }
-        if(countryName.equalsIgnoreCase("USA"))
-        {
+        else if(countryName.equalsIgnoreCase("UDA") ){
             return CountryName.USA;
         }
-        if(countryName.equalsIgnoreCase("AUS"))
-        {
+        else if(countryName.equalsIgnoreCase("AUS")){
             return CountryName.AUS;
         }
-        if(countryName.equalsIgnoreCase("CHI"))
-        {
+        else if(countryName.equalsIgnoreCase("CHI")){
             return CountryName.CHI;
         }
-        if(countryName.equalsIgnoreCase("JPN"))
-        {
+        else if (countryName.equalsIgnoreCase("JPN")){
             return CountryName.JPN;
         }
-        throw new Exception("Country not found");
+        else{
+            throw new Exception("Country not found");
+        }
+
     }
 }
