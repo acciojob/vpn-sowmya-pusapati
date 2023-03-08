@@ -11,6 +11,7 @@ import com.driver.services.AdminService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -26,7 +27,7 @@ public class AdminServiceImpl implements AdminService {
 
     @Override
     public Admin register(String username, String password) {
-        Admin admin=new Admin();
+        Admin admin = new Admin();
         admin.setUsername(username);
         admin.setPassword(password);
         adminRepository1.save(admin);
@@ -35,14 +36,25 @@ public class AdminServiceImpl implements AdminService {
 
     @Override
     public Admin addServiceProvider(int adminId, String providerName) {
-        Admin admin=adminRepository1.findById(adminId).get();
-        ServiceProvider serviceProvider=new ServiceProvider();
+        Admin admin = adminRepository1.findById(adminId).get();
+
+        ServiceProvider serviceProvider = new ServiceProvider();
         serviceProvider.setName(providerName);
         serviceProvider.setAdmin(admin);
-        List<ServiceProvider> serviceProviderList=admin.getServiceProviders();
-        serviceProviderList.add(serviceProvider);
-        admin.setServiceProviders(serviceProviderList);
+
+        List<ServiceProvider>serviceProviders;
+
+        if(admin.getServiceProviders()== null)
+            serviceProviders= new ArrayList<>();
+        else
+            serviceProviders= admin.getServiceProviders();
+
+        serviceProviders.add(serviceProvider);
+
+
         adminRepository1.save(admin);
+
+
         return admin;
 
     }
@@ -50,68 +62,46 @@ public class AdminServiceImpl implements AdminService {
     @Override
     public ServiceProvider addCountry(int serviceProviderId, String countryName) throws Exception{
 
-        ServiceProvider serviceProvider=serviceProviderRepository1.findById(serviceProviderId).get();
-        List<Country> countryList=serviceProvider.getCountryList();
-        Country country=new Country();
-        if(!isValidCountryName(countryName))
-        {
+        // ind, aus, usa, chi, jpn.
+        if(countryName.equalsIgnoreCase("ind") || countryName.equalsIgnoreCase("aus") || countryName.equalsIgnoreCase("usa") || countryName.equalsIgnoreCase("chi") || countryName.equalsIgnoreCase("jpn")) {
+
+
+            ServiceProvider serviceProvider = serviceProviderRepository1.findById(serviceProviderId).get();
+            Country country = new Country();
+
+            if(countryName.equalsIgnoreCase("ind")) {
+                country.setCountryName(CountryName.IND);
+                country.setCode(CountryName.IND.toCode());
+            } else if (countryName.equalsIgnoreCase("aus")) {
+                country.setCountryName(CountryName.AUS);
+                country.setCode(CountryName.AUS.toCode());
+            }
+            else if (countryName.equalsIgnoreCase("usa")) {
+                country.setCountryName(CountryName.USA);
+                country.setCode(CountryName.USA.toCode());
+            }
+            else if (countryName.equalsIgnoreCase("chi")) {
+                country.setCountryName(CountryName.CHI);
+                country.setCode(CountryName.CHI.toCode());
+            }
+            else {
+                country.setCountryName(CountryName.JPN);
+                country.setCode(CountryName.JPN.toCode());
+            }
+
+            country.setServiceProvider(serviceProvider);
+            List<Country> countryList = serviceProvider.getCountryList();
+            countryList.add(country);
+
+            serviceProvider.setCountryList(countryList);
+
+            serviceProviderRepository1.save(serviceProvider);
+            return serviceProvider;
+        }
+        else
             throw new Exception("Country not found");
-        }
-        CountryName countryName1=getCountryName(countryName);
-        country.setCountryName(countryName1);
-        country.setCode(countryName1.toCode());
-        country.setServiceProvider(serviceProvider);
-        countryList.add(country);
-        serviceProvider.setCountryList(countryList);
-        serviceProviderRepository1.save(serviceProvider);
-
-        return serviceProvider;
     }
 
-    private boolean isValidCountryName(String countryName)
-    {
-        if(countryName.equalsIgnoreCase("IND")){
-            return true;
-        }
-        else if(countryName.equalsIgnoreCase("USA")){
-            return true;
-        }
-        else if(countryName.equalsIgnoreCase("AUS")) {
-            return true;
-        }
-        else if(countryName.equalsIgnoreCase("CHI")) {
-            return true;
-        }
-        else if(countryName.equalsIgnoreCase("JPN")) {
-            return true;
-        }
-        else {
-            return false;
-        }
-    }
 
-    public CountryName getCountryName(String countryName) throws Exception
-    {
-        if(countryName.equalsIgnoreCase("IND"))
-        {
-            return CountryName.IND;
-        }
-        if(countryName.equalsIgnoreCase("USA"))
-        {
-            return CountryName.USA;
-        }
-        if(countryName.equalsIgnoreCase("AUS"))
-        {
-            return CountryName.AUS;
-        }
-        if(countryName.equalsIgnoreCase("CHI"))
-        {
-            return CountryName.CHI;
-        }
-        if(countryName.equalsIgnoreCase("JPN"))
-        {
-            return CountryName.JPN;
-        }
-        throw new Exception("Country not found");
-    }
+
 }
