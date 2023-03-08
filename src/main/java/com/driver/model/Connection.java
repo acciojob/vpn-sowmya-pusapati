@@ -5,7 +5,6 @@ import org.hibernate.annotations.Generated;
 import javax.persistence.*;
 
 @Entity
-@Table
 public class Connection {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
